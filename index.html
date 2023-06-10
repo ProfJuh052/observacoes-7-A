@@ -1,0 +1,1721 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>7º ano A - Tabela de comportamento</title>
+    <link rel="icon" type="image/png" href="icon.png"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+
+    body{
+        background-color: #cccccc;
+        font-family: "Helvetica", Arial, sans-serif;
+    }
+
+    .align{
+        text-align: end;
+    }
+
+    h1, h2{
+        color: #000000;
+        margin: 1%;
+        font-size: 16px;
+    }
+
+    table {
+        border-collapse: collapse;
+        margin: 0 0.1% 0 0.1%;
+        padding: 2px;
+        width: 100%;
+        font-size: 12px;
+        font-weight: bold;
+        color: #000000;
+    }
+
+    th, td {
+        border: none;
+        padding: 8px;
+        text-align: center;
+        z-index: 1;
+    }
+
+    td{
+        border: solid 1px #cccccc;
+    }
+
+    .fixed-row {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+    }
+
+    .index{
+        z-index: 0;
+    }
+    
+    .fixed-row th {
+        font-weight: bold;
+    }
+
+    .title {
+        background-color: #cccccc;
+        color: #000000;
+    }
+
+    .dia{
+        font-size: 16px;
+        text-align: start;
+        padding-left: 2px;
+    }
+
+    td input[type="checkbox"] {
+        transform: scale(1.5);
+    }
+
+    input[type="checkbox"]:hover{
+        cursor: pointer;
+        transition: 0.5s;
+        transform: scale(1.3);
+    }
+
+    td.white {
+        background-color: #ffffff;
+    }
+
+    tr.white td {
+        background-color: #ffffff;
+    }
+
+    td.yellow {
+        background-color: #ffff52;
+    }
+
+    tr.yellow td {
+        background-color: #ffff52;
+    }
+
+    td.red {
+        background-color: #ff5252;
+    }
+
+    tr.red td {
+        background-color: #ff5252;
+    }
+
+    .name {
+        padding: 1%;
+        text-align: left;
+    }
+
+    select{
+        background-color: #ffffff;
+        color: #000000;
+        text-align: left;
+    }
+
+    option{
+        background-color: #ffff52;
+        color: #000000;
+        text-align: center;
+        font-weight: bold;
+    }
+
+    .pdf-button {
+        background-color: #ff0505;
+        color: #ffffff;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        width: 20%;
+        margin: 10px 40% 10px 40%;
+        transition: 1s;
+    }
+
+    .pdf-button:hover {
+        transform: scale(0.9);
+    }
+
+    footer{
+        padding: 10px;
+        text-align: center;
+        color: #000000;
+        font-weight: bold;
+        font-size: 12px;
+    }
+
+    @media (max-width: 600px) {
+      h1, h2 {
+        font-size: 20px;
+      }
+
+      table {
+        font-size: 10px;
+      }
+
+      th, td {
+        padding: 4px;
+      }
+    }
+
+    </style>
+    <script>
+    
+    function exibirDataAcesso() {
+            var dataHora = new Date();
+            var dia = dataHora.getDate();
+            var mes = dataHora.getMonth() + 1;
+            var ano = dataHora.getFullYear();
+            var elemento = document.getElementById("dataAcesso");
+            elemento.innerHTML = dia + "-" + mes + "-" + ano;
+        }
+
+    function updatePoints(row) {
+        var checkboxes = row.getElementsByTagName('input');
+        var points = 4;
+
+        if (checkboxes[0].checked) {
+            points -= 3;
+        }
+
+        if (checkboxes[3].checked) {
+            points -= 2;
+        }
+
+        if (checkboxes[4].checked) {
+            points -= 3;
+        }
+
+        for (var i = 1; i < checkboxes.length; i++) {
+            if (checkboxes[i].checked) {
+                points -= 1;
+            }
+        }
+
+        row.cells[row.cells.length - 2].textContent = points;
+
+        row.classList.remove('red', 'yellow', 'white');
+
+        if (points >= 3) {
+            row.classList.add('white');
+        } else if (points >= 1) {
+            row.classList.add('yellow');
+        } else {
+            row.classList.add('red');
+        }
+
+        var compCell = row.cells[row.cells.length - 1];
+        if (points >= 3) {
+            compCell.textContent = 'Bom';
+        } else if (points >= 1) {
+            compCell.textContent = 'Médio';
+        } else {
+            compCell.textContent = 'Ruim';
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var table = document.querySelector('table');
+        var rows = table.getElementsByTagName('tr');
+
+        for (var i = 0; i < rows.length; i++) {
+            if (rows[i].classList.contains('red')) {
+                updatePoints(rows[i]);
+            }
+        }
+    });
+
+    function downloadPDF() {
+        var table = document.querySelector('table');
+        var date = new Date().toLocaleDateString('pt-BR').replace(/\//g, '-');
+        var filename = '7º A - Prof. Juliano - dia ' + date + '.pdf';
+
+        var opt = {
+            margin: 0.5,
+            filename: filename,
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'in', format: 'A3', orientation: 'portrait' }
+        };
+
+        html2pdf().from(table).set(opt).save();
+    }  
+    </script>
+</head>
+<body onload="exibirDataAcesso()">
+    <table>
+        <thead>
+            <tr class="index" class="fixed-row">
+                <th colspan="4"><h1>COLÉGIO ALEXANDRA - PROF. JULIANO - 7º A</h1></th>
+                <th colspan="2"><h1 class="align">OBSERVAÇÕES DO DIA:</h1></th>
+                <th class="dia" id="dataAcesso"></th>
+                <th></th>
+            </tr>
+            <tr class="fixed-row">
+                <th class="title">Aluno</th>
+                <th class="title">Fora da sala</th>
+                <th class="title">Fora do lugar / Andando</th>
+                <th class="title">Conversando / Falando Alto</th>
+                <th class="title">Recusou-se a fazer a tarefa / Mexendo no celular</th>
+                <th class="title">Brigou ou discutiu</th>
+                <th class="title">Brigou com quem?</th>
+                <th class="title" style="display:none;">Pontuação</th>
+                <th class="title">Comportamento</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="red">
+                <td class="name">Alex Jr.</td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td>
+                    <select onchange="updatePoints(this.parentNode.parentNode)">
+                        <option value="0"></option>
+                        <option value="2">Alex Pedroso</option>
+                        <option value="3">Allan</option>
+                        <option value="4">Ana Clara</option>
+                        <option value="5">Ana Luiza</option>
+                        <option value="6">David</option>
+                        <option value="7">Dylan</option>
+                        <option value="8">Emanuelle</option>
+                        <option value="9">Emely</option>
+                        <option value="10">João Gabriel</option>
+                        <option value="11">João Vitor</option>
+                        <option value="12">Julia</option>
+                        <option value="13">Kauã</option>
+                        <option value="14">Kelvyn</option>
+                        <option value="15">Lara</option>
+                        <option value="16">Laura</option>
+                        <option value="17">Liége</option>
+                        <option value="18">Lucas</option>
+                        <option value="19">Miguel</option>
+                        <option value="20">Mirella</option>
+                        <option value="21">Nathanaelly</option>
+                        <option value="22">Pablo</option>
+                        <option value="23">Paulo Gabriel</option>
+                        <option value="24">Paulo Kaled</option>
+                        <option value="25">Robson</option>
+                        <option value="26">Rhayck</option>
+                        <option value="27">Sthefany</option>
+                        <option value="28">Thiago Andrioli</option>
+                        <option value="29">Yuri</option>
+                        <option value="30">Matheus Gonçalves</option>
+                        <option value="31">Thiago Cordeiro</option>
+                    </select>
+                </td>
+                <td style="display:none;">4</td>
+                <td></td>
+            </tr>
+            <tr class="red">
+                <td class="name">Alex Pedroso</td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td>
+                    <select onchange="updatePoints(this.parentNode.parentNode)">
+                        <option value="0"></option>
+                        <option value="1">Alex Jr.</option>
+                        <option value="3">Allan</option>
+                        <option value="4">Ana Clara</option>
+                        <option value="5">Ana Luiza</option>
+                        <option value="6">David</option>
+                        <option value="7">Dylan</option>
+                        <option value="8">Emanuelle</option>
+                        <option value="9">Emely</option>
+                        <option value="10">João Gabriel</option>
+                        <option value="11">João Vitor</option>
+                        <option value="12">Julia</option>
+                        <option value="13">Kauã</option>
+                        <option value="14">Kelvyn</option>
+                        <option value="15">Lara</option>
+                        <option value="16">Laura</option>
+                        <option value="17">Liége</option>
+                        <option value="18">Lucas</option>
+                        <option value="19">Miguel</option>
+                        <option value="20">Mirella</option>
+                        <option value="21">Nathanaelly</option>
+                        <option value="22">Pablo</option>
+                        <option value="23">Paulo Gabriel</option>
+                        <option value="24">Paulo Kaled</option>
+                        <option value="25">Robson</option>
+                        <option value="26">Simony</option>
+                        <option value="27">Sthefany</option>
+                        <option value="28">Thiago Andrioli</option>
+                        <option value="29">Yuri</option>
+                        <option value="30">Matheus Gonçalves</option>
+                        <option value="31">Thiago Cordeiro</option>
+                    </select>
+                </td>
+                <td style="display:none;">4</td>
+                <td></td>
+            </tr>
+            <tr class="red">
+                <td class="name">Allan</td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td>
+                    <select onchange="updatePoints(this.parentNode.parentNode)">
+                        <option value="0"></option>
+                        <option value="1">Alex Jr.</option>
+                        <option value="2">Alex Pedroso</option>
+                        <option value="4">Ana Clara</option>
+                        <option value="5">Ana Luiza</option>
+                        <option value="6">David</option>
+                        <option value="7">Dylan</option>
+                        <option value="8">Emanuelle</option>
+                        <option value="9">Emely</option>
+                        <option value="10">João Gabriel</option>
+                        <option value="11">João Vitor</option>
+                        <option value="12">Julia</option>
+                        <option value="13">Kauã</option>
+                        <option value="14">Kelvyn</option>
+                        <option value="15">Lara</option>
+                        <option value="16">Laura</option>
+                        <option value="17">Liége</option>
+                        <option value="18">Lucas</option>
+                        <option value="19">Miguel</option>
+                        <option value="20">Mirella</option>
+                        <option value="21">Nathanaelly</option>
+                        <option value="22">Pablo</option>
+                        <option value="23">Paulo Gabriel</option>
+                        <option value="24">Paulo Kaled</option>
+                        <option value="25">Robson</option>
+                        <option value="26">Simony</option>
+                        <option value="27">Sthefany</option>
+                        <option value="28">Thiago Andrioli</option>
+                        <option value="29">Yuri</option>
+                        <option value="30">Matheus Gonçalves</option>
+                        <option value="31">Thiago Cordeiro</option>
+                    </select>
+                </td>
+                <td style="display:none;">4</td>
+                <td></td>
+            </tr>
+            <tr class="red">
+                <td class="name">Ana Clara</td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td>
+                    <select onchange="updatePoints(this.parentNode.parentNode)">
+                        <option value="0"></option>
+                        <option value="1">Alex Jr.</option>
+                        <option value="2">Alex Pedroso</option>
+                        <option value="3">Allan</option>
+                        <option value="5">Ana Luiza</option>
+                        <option value="6">David</option>
+                        <option value="7">Dylan</option>
+                        <option value="8">Emanuelle</option>
+                        <option value="9">Emely</option>
+                        <option value="10">João Gabriel</option>
+                        <option value="11">João Vitor</option>
+                        <option value="12">Julia</option>
+                        <option value="13">Kauã</option>
+                        <option value="14">Kelvyn</option>
+                        <option value="15">Lara</option>
+                        <option value="16">Laura</option>
+                        <option value="17">Liége</option>
+                        <option value="18">Lucas</option>
+                        <option value="19">Miguel</option>
+                        <option value="20">Mirella</option>
+                        <option value="21">Nathanaelly</option>
+                        <option value="22">Pablo</option>
+                        <option value="23">Paulo Gabriel</option>
+                        <option value="24">Paulo Kaled</option>
+                        <option value="25">Robson</option>
+                        <option value="26">Simony</option>
+                        <option value="27">Sthefany</option>
+                        <option value="28">Thiago Andrioli</option>
+                        <option value="29">Yuri</option>
+                        <option value="30">Matheus Gonçalves</option>
+                        <option value="31">Thiago Cordeiro</option>
+                    </select>
+                </td>
+                <td style="display:none;">4</td>
+                <td></td>
+            </tr>
+            <tr class="red">
+                <td class="name">Ana Luiza</td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td>
+                    <select onchange="updatePoints(this.parentNode.parentNode)">
+                        <option value="0"></option>
+                        <option value="1">Alex Jr.</option>
+                        <option value="2">Alex Pedroso</option>
+                        <option value="3">Allan</option>
+                        <option value="4">Ana Clara</option>
+                        <option value="6">David</option>
+                        <option value="7">Dylan</option>
+                        <option value="8">Emanuelle</option>
+                        <option value="9">Emely</option>
+                        <option value="10">João Gabriel</option>
+                        <option value="11">João Vitor</option>
+                        <option value="12">Julia</option>
+                        <option value="13">Kauã</option>
+                        <option value="14">Kelvyn</option>
+                        <option value="15">Lara</option>
+                        <option value="16">Laura</option>
+                        <option value="17">Liége</option>
+                        <option value="18">Lucas</option>
+                        <option value="19">Miguel</option>
+                        <option value="20">Mirella</option>
+                        <option value="21">Nathanaelly</option>
+                        <option value="22">Pablo</option>
+                        <option value="23">Paulo Gabriel</option>
+                        <option value="24">Paulo Kaled</option>
+                        <option value="25">Robson</option>
+                        <option value="26">Simony</option>
+                        <option value="27">Sthefany</option>
+                        <option value="28">Thiago Andrioli</option>
+                        <option value="29">Yuri</option>
+                        <option value="30">Matheus Gonçalves</option>
+                        <option value="31">Thiago Cordeiro</option>
+                    </select>
+                </td>
+                <td style="display:none;">4</td>
+                <td></td>
+            </tr>
+            <tr class="red">
+                <td class="name">David</td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td>
+                    <select onchange="updatePoints(this.parentNode.parentNode)">
+                        <option value="0"></option>
+                        <option value="1">Alex Jr.</option>
+                        <option value="2">Alex Pedroso</option>
+                        <option value="3">Allan</option>
+                        <option value="4">Ana Clara</option>
+                        <option value="5">Ana Luiza</option>
+                        <option value="7">Dylan</option>
+                        <option value="8">Emanuelle</option>
+                        <option value="9">Emely</option>
+                        <option value="10">João Gabriel</option>
+                        <option value="11">João Vitor</option>
+                        <option value="12">Julia</option>
+                        <option value="13">Kauã</option>
+                        <option value="14">Kelvyn</option>
+                        <option value="15">Lara</option>
+                        <option value="16">Laura</option>
+                        <option value="17">Liége</option>
+                        <option value="18">Lucas</option>
+                        <option value="19">Miguel</option>
+                        <option value="20">Mirella</option>
+                        <option value="21">Nathanaelly</option>
+                        <option value="22">Pablo</option>
+                        <option value="23">Paulo Gabriel</option>
+                        <option value="24">Paulo Kaled</option>
+                        <option value="25">Robson</option>
+                        <option value="26">Simony</option>
+                        <option value="27">Sthefany</option>
+                        <option value="28">Thiago Andrioli</option>
+                        <option value="29">Yuri</option>
+                        <option value="30">Matheus Gonçalves</option>
+                        <option value="31">Thiago Cordeiro</option>
+                    </select>
+                </td>
+                <td style="display:none;">4</td>
+                <td></td>
+            </tr>
+            <tr class="red">
+                <td class="name">Dylan</td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td>
+                    <select onchange="updatePoints(this.parentNode.parentNode)">
+                        <option value="0"></option>
+                        <option value="1">Alex Jr.</option>
+                        <option value="2">Alex Pedroso</option>
+                        <option value="3">Allan</option>
+                        <option value="4">Ana Clara</option>
+                        <option value="5">Ana Luiza</option>
+                        <option value="6">David</option>
+                        <option value="8">Emanuelle</option>
+                        <option value="9">Emely</option>
+                        <option value="10">João Gabriel</option>
+                        <option value="11">João Vitor</option>
+                        <option value="12">Julia</option>
+                        <option value="13">Kauã</option>
+                        <option value="14">Kelvyn</option>
+                        <option value="15">Lara</option>
+                        <option value="16">Laura</option>
+                        <option value="17">Liége</option>
+                        <option value="18">Lucas</option>
+                        <option value="19">Miguel</option>
+                        <option value="20">Mirella</option>
+                        <option value="21">Nathanaelly</option>
+                        <option value="22">Pablo</option>
+                        <option value="23">Paulo Gabriel</option>
+                        <option value="24">Paulo Kaled</option>
+                        <option value="25">Robson</option>
+                        <option value="26">Simony</option>
+                        <option value="27">Sthefany</option>
+                        <option value="28">Thiago Andrioli</option>
+                        <option value="29">Yuri</option>
+                        <option value="30">Matheus Gonçalves</option>
+                        <option value="31">Thiago Cordeiro</option>
+                    </select>
+                </td>
+                <td style="display:none;">4</td>
+                <td></td>
+            </tr>
+            <tr class="red">
+                <td class="name">Emanuelle</td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td>
+                    <select onchange="updatePoints(this.parentNode.parentNode)">
+                        <option value="0"></option>
+                        <option value="1">Alex Jr.</option>
+                        <option value="2">Alex Pedroso</option>
+                        <option value="3">Allan</option>
+                        <option value="4">Ana Clara</option>
+                        <option value="5">Ana Luiza</option>
+                        <option value="6">David</option>
+                        <option value="7">Dylan</option>
+                        <option value="9">Emely</option>
+                        <option value="10">João Gabriel</option>
+                        <option value="11">João Vitor</option>
+                        <option value="12">Julia</option>
+                        <option value="13">Kauã</option>
+                        <option value="14">Kelvyn</option>
+                        <option value="15">Lara</option>
+                        <option value="16">Laura</option>
+                        <option value="17">Liége</option>
+                        <option value="18">Lucas</option>
+                        <option value="19">Miguel</option>
+                        <option value="20">Mirella</option>
+                        <option value="21">Nathanaelly</option>
+                        <option value="22">Pablo</option>
+                        <option value="23">Paulo Gabriel</option>
+                        <option value="24">Paulo Kaled</option>
+                        <option value="25">Robson</option>
+                        <option value="26">Simony</option>
+                        <option value="27">Sthefany</option>
+                        <option value="28">Thiago Andrioli</option>
+                        <option value="29">Yuri</option>
+                        <option value="30">Matheus Gonçalves</option>
+                        <option value="31">Thiago Cordeiro</option>
+                    </select>
+                </td>
+                <td style="display:none;">4</td>
+                <td></td>
+            </tr>
+            <tr class="red">
+                <td class="name">Emely</td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td>
+                    <select onchange="updatePoints(this.parentNode.parentNode)">
+                        <option value="0"></option>
+                        <option value="1">Alex Jr.</option>
+                        <option value="2">Alex Pedroso</option>
+                        <option value="3">Allan</option>
+                        <option value="4">Ana Clara</option>
+                        <option value="5">Ana Luiza</option>
+                        <option value="6">David</option>
+                        <option value="7">Dylan</option>
+                        <option value="8">Emanuelle</option>
+                        <option value="10">João Gabriel</option>
+                        <option value="11">João Vitor</option>
+                        <option value="12">Julia</option>
+                        <option value="13">Kauã</option>
+                        <option value="14">Kelvyn</option>
+                        <option value="15">Lara</option>
+                        <option value="16">Laura</option>
+                        <option value="17">Liége</option>
+                        <option value="18">Lucas</option>
+                        <option value="19">Miguel</option>
+                        <option value="20">Mirella</option>
+                        <option value="21">Nathanaelly</option>
+                        <option value="22">Pablo</option>
+                        <option value="23">Paulo Gabriel</option>
+                        <option value="24">Paulo Kaled</option>
+                        <option value="25">Robson</option>
+                        <option value="26">Simony</option>
+                        <option value="27">Sthefany</option>
+                        <option value="28">Thiago Andrioli</option>
+                        <option value="29">Yuri</option>
+                        <option value="30">Matheus Gonçalves</option>
+                        <option value="31">Thiago Cordeiro</option>
+                    </select>
+                </td>
+                <td style="display:none;">4</td>
+                <td></td>
+            </tr>
+            <tr class="red">
+                <td class="name">João Gabriel</td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td>
+                    <select onchange="updatePoints(this.parentNode.parentNode)">
+                        <option value="0"></option>
+                        <option value="1">Alex Jr.</option>
+                        <option value="2">Alex Pedroso</option>
+                        <option value="3">Allan</option>
+                        <option value="4">Ana Clara</option>
+                        <option value="5">Ana Luiza</option>
+                        <option value="6">David</option>
+                        <option value="7">Dylan</option>
+                        <option value="8">Emanuelle</option>
+                        <option value="9">Emely</option>
+                        <option value="11">João Vitor</option>
+                        <option value="12">Julia</option>
+                        <option value="13">Kauã</option>
+                        <option value="14">Kelvyn</option>
+                        <option value="15">Lara</option>
+                        <option value="16">Laura</option>
+                        <option value="17">Liége</option>
+                        <option value="18">Lucas</option>
+                        <option value="19">Miguel</option>
+                        <option value="20">Mirella</option>
+                        <option value="21">Nathanaelly</option>
+                        <option value="22">Pablo</option>
+                        <option value="23">Paulo Gabriel</option>
+                        <option value="24">Paulo Kaled</option>
+                        <option value="25">Robson</option>
+                        <option value="26">Simony</option>
+                        <option value="27">Sthefany</option>
+                        <option value="28">Thiago Andrioli</option>
+                        <option value="29">Yuri</option>
+                        <option value="30">Matheus Gonçalves</option>
+                        <option value="31">Thiago Cordeiro</option>
+                    </select>
+                </td>
+                <td style="display:none;">4</td>
+                <td></td>
+            </tr>
+            <tr class="red">
+                <td class="name">João Vitor</td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td>
+                    <select onchange="updatePoints(this.parentNode.parentNode)">
+                        <option value="0"></option>
+                        <option value="1">Alex Jr.</option>
+                        <option value="2">Alex Pedroso</option>
+                        <option value="3">Allan</option>
+                        <option value="4">Ana Clara</option>
+                        <option value="5">Ana Luiza</option>
+                        <option value="6">David</option>
+                        <option value="7">Dylan</option>
+                        <option value="8">Emanuelle</option>
+                        <option value="9">Emely</option>
+                        <option value="10">João Gabriel</option>
+                        <option value="12">Julia</option>
+                        <option value="13">Kauã</option>
+                        <option value="14">Kelvyn</option>
+                        <option value="15">Lara</option>
+                        <option value="16">Laura</option>
+                        <option value="17">Liége</option>
+                        <option value="18">Lucas</option>
+                        <option value="19">Miguel</option>
+                        <option value="20">Mirella</option>
+                        <option value="21">Nathanaelly</option>
+                        <option value="22">Pablo</option>
+                        <option value="23">Paulo Gabriel</option>
+                        <option value="24">Paulo Kaled</option>
+                        <option value="25">Robson</option>
+                        <option value="26">Simony</option>
+                        <option value="27">Sthefany</option>
+                        <option value="28">Thiago Andrioli</option>
+                        <option value="29">Yuri</option>
+                        <option value="30">Matheus Gonçalves</option>
+                        <option value="31">Thiago Cordeiro</option>
+                    </select>
+                </td>
+                <td style="display:none;">4</td>
+                <td></td>
+            </tr>
+            <tr class="red">
+                <td class="name">Julia</td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td>
+                    <select onchange="updatePoints(this.parentNode.parentNode)">
+                        <option value="0"></option>
+                        <option value="1">Alex Jr.</option>
+                        <option value="2">Alex Pedroso</option>
+                        <option value="3">Allan</option>
+                        <option value="4">Ana Clara</option>
+                        <option value="5">Ana Luiza</option>
+                        <option value="6">David</option>
+                        <option value="7">Dylan</option>
+                        <option value="8">Emanuelle</option>
+                        <option value="9">Emely</option>
+                        <option value="10">João Gabriel</option>
+                        <option value="11">João Vitor</option>
+                        <option value="13">Kauã</option>
+                        <option value="14">Kelvyn</option>
+                        <option value="15">Lara</option>
+                        <option value="16">Laura</option>
+                        <option value="17">Liége</option>
+                        <option value="18">Lucas</option>
+                        <option value="19">Miguel</option>
+                        <option value="20">Mirella</option>
+                        <option value="21">Nathanaelly</option>
+                        <option value="22">Pablo</option>
+                        <option value="23">Paulo Gabriel</option>
+                        <option value="24">Paulo Kaled</option>
+                        <option value="25">Robson</option>
+                        <option value="26">Simony</option>
+                        <option value="27">Sthefany</option>
+                        <option value="28">Thiago Andrioli</option>
+                        <option value="29">Yuri</option>
+                        <option value="30">Matheus Gonçalves</option>
+                        <option value="31">Thiago Cordeiro</option>
+                    </select>
+                </td>
+                <td style="display:none;">4</td>
+                <td></td>
+            </tr>
+            <tr class="red">
+                <td class="name">Kauã</td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td>
+                    <select onchange="updatePoints(this.parentNode.parentNode)">
+                        <option value="0"></option>
+                        <option value="1">Alex Jr.</option>
+                        <option value="2">Alex Pedroso</option>
+                        <option value="3">Allan</option>
+                        <option value="4">Ana Clara</option>
+                        <option value="5">Ana Luiza</option>
+                        <option value="6">David</option>
+                        <option value="7">Dylan</option>
+                        <option value="8">Emanuelle</option>
+                        <option value="9">Emely</option>
+                        <option value="10">João Gabriel</option>
+                        <option value="11">João Vitor</option>
+                        <option value="12">Julia</option>
+                        <option value="14">Kelvyn</option>
+                        <option value="15">Lara</option>
+                        <option value="16">Laura</option>
+                        <option value="17">Liége</option>
+                        <option value="18">Lucas</option>
+                        <option value="19">Miguel</option>
+                        <option value="20">Mirella</option>
+                        <option value="21">Nathanaelly</option>
+                        <option value="22">Pablo</option>
+                        <option value="23">Paulo Gabriel</option>
+                        <option value="24">Paulo Kaled</option>
+                        <option value="25">Robson</option>
+                        <option value="26">Simony</option>
+                        <option value="27">Sthefany</option>
+                        <option value="28">Thiago Andrioli</option>
+                        <option value="29">Yuri</option>
+                        <option value="30">Matheus Gonçalves</option>
+                        <option value="31">Thiago Cordeiro</option>
+                    </select>
+                </td>
+                <td style="display:none;">4</td>
+                <td></td>
+            </tr>
+            <tr class="red">
+                <td class="name">Kelvyn</td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td>
+                    <select onchange="updatePoints(this.parentNode.parentNode)">
+                        <option value="0"></option>
+                        <option value="1">Alex Jr.</option>
+                        <option value="2">Alex Pedroso</option>
+                        <option value="3">Allan</option>
+                        <option value="4">Ana Clara</option>
+                        <option value="5">Ana Luiza</option>
+                        <option value="6">David</option>
+                        <option value="7">Dylan</option>
+                        <option value="8">Emanuelle</option>
+                        <option value="9">Emely</option>
+                        <option value="10">João Gabriel</option>
+                        <option value="11">João Vitor</option>
+                        <option value="12">Julia</option>
+                        <option value="13">Kauã</option>
+                        <option value="15">Kleydson</option>
+                        <option value="15">Lara Bahia</option>
+                        <option value="16">Laura</option>
+                        <option value="17">Liége</option>
+                        <option value="18">Lucas</option>
+                        <option value="19">Miguel</option>
+                        <option value="20">Mirella</option>
+                        <option value="21">Nathanaelly</option>
+                        <option value="22">Pablo</option>
+                        <option value="23">Paulo Gabriel</option>
+                        <option value="24">Paulo Kaled</option>
+                        <option value="25">Robson</option>
+                        <option value="26">Simony</option>
+                        <option value="27">Sthefany</option>
+                        <option value="28">Thiago Andrioli</option>
+                        <option value="29">Yuri</option>
+                        <option value="30">Matheus Gonçalves</option>
+                        <option value="31">Thiago Cordeiro</option>
+                    </select>
+                </td>
+                <td style="display:none;">4</td>
+                <td></td>
+            </tr>
+            <tr class="red">
+                <td class="name">Kleydson</td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td>
+                    <select onchange="updatePoints(this.parentNode.parentNode)">
+                        <option value="0"></option>
+                        <option value="1">Alex Jr.</option>
+                        <option value="2">Alex Pedroso</option>
+                        <option value="3">Allan</option>
+                        <option value="4">Ana Clara</option>
+                        <option value="5">Ana Luiza</option>
+                        <option value="6">David</option>
+                        <option value="7">Dylan</option>
+                        <option value="8">Emanuelle</option>
+                        <option value="9">Emely</option>
+                        <option value="10">João Gabriel</option>
+                        <option value="11">João Vitor</option>
+                        <option value="12">Julia</option>
+                        <option value="13">Kauã</option>
+                        <option value="14">Kelvyn</option>
+                        <option value="16">Lara Bahia</option>
+                        <option value="17">Liége</option>
+                        <option value="18">Lucas</option>
+                        <option value="19">Miguel</option>
+                        <option value="20">Mirella</option>
+                        <option value="21">Nathanaelly</option>
+                        <option value="22">Pablo</option>
+                        <option value="23">Paulo Gabriel</option>
+                        <option value="24">Paulo Kaled</option>
+                        <option value="25">Robson</option>
+                        <option value="26">Simony</option>
+                        <option value="27">Sthefany</option>
+                        <option value="28">Thiago Andrioli</option>
+                        <option value="29">Yuri</option>
+                        <option value="30">Matheus Gonçalves</option>
+                        <option value="31">Thiago Cordeiro</option>
+                    </select>
+                </td>
+                <td style="display:none;">4</td>
+                <td></td>
+            </tr>
+            <tr class="red">
+                <td class="name">Lara</td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td>
+                    <select onchange="updatePoints(this.parentNode.parentNode)">
+                        <option value="0"></option>
+                        <option value="1">Alex Jr.</option>
+                        <option value="2">Alex Pedroso</option>
+                        <option value="3">Allan</option>
+                        <option value="4">Ana Clara</option>
+                        <option value="5">Ana Luiza</option>
+                        <option value="6">David</option>
+                        <option value="7">Dylan</option>
+                        <option value="8">Emanuelle</option>
+                        <option value="9">Emely</option>
+                        <option value="10">João Gabriel</option>
+                        <option value="11">João Vitor</option>
+                        <option value="12">Julia</option>
+                        <option value="13">Kauã</option>
+                        <option value="15">Kelvyn</option>
+                        <option value="15">Kleydson</option>
+                        <option value="16">Laura</option>
+                        <option value="17">Liége</option>
+                        <option value="18">Lucas</option>
+                        <option value="19">Miguel</option>
+                        <option value="20">Mirella</option>
+                        <option value="21">Nathanaelly</option>
+                        <option value="22">Pablo</option>
+                        <option value="23">Paulo Gabriel</option>
+                        <option value="24">Paulo Kaled</option>
+                        <option value="25">Robson</option>
+                        <option value="26">Simony</option>
+                        <option value="27">Sthefany</option>
+                        <option value="28">Thiago Andrioli</option>
+                        <option value="29">Yuri</option>
+                        <option value="30">Matheus Gonçalves</option>
+                        <option value="31">Thiago Cordeiro</option>
+                    </select>
+                </td>
+                <td style="display:none;">4</td>
+                <td></td>
+            </tr>
+            <tr class="red">
+                <td class="name">Laura</td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td>
+                    <select onchange="updatePoints(this.parentNode.parentNode)">
+                        <option value="0"></option>
+                        <option value="1">Alex Jr.</option>
+                        <option value="2">Alex Pedroso</option>
+                        <option value="3">Allan</option>
+                        <option value="4">Ana Clara</option>
+                        <option value="5">Ana Luiza</option>
+                        <option value="6">David</option>
+                        <option value="7">Dylan</option>
+                        <option value="8">Emanuelle</option>
+                        <option value="9">Emely</option>
+                        <option value="10">João Gabriel</option>
+                        <option value="11">João Vitor</option>
+                        <option value="12">Julia</option>
+                        <option value="13">Kauã</option>
+                        <option value="14">Kelvyn</option>
+                        <option value="15">Lara</option>
+                        <option value="17">Liége</option>
+                        <option value="18">Lucas</option>
+                        <option value="19">Miguel</option>
+                        <option value="20">Mirella</option>
+                        <option value="21">Nathanaelly</option>
+                        <option value="22">Pablo</option>
+                        <option value="23">Paulo Gabriel</option>
+                        <option value="24">Paulo Kaled</option>
+                        <option value="25">Robson</option>
+                        <option value="26">Simony</option>
+                        <option value="27">Sthefany</option>
+                        <option value="28">Thiago Andrioli</option>
+                        <option value="29">Yuri</option>
+                        <option value="30">Matheus Gonçalves</option>
+                        <option value="31">Thiago Cordeiro</option>
+                    </select>
+                </td>
+                <td style="display:none;">4</td>
+                <td></td>
+            </tr>
+            <tr class="red">
+                <td class="name">Liége</td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td>
+                    <select onchange="updatePoints(this.parentNode.parentNode)">
+                        <option value="0"></option>
+                        <option value="1">Alex Jr.</option>
+                        <option value="2">Alex Pedroso</option>
+                        <option value="3">Allan</option>
+                        <option value="4">Ana Clara</option>
+                        <option value="5">Ana Luiza</option>
+                        <option value="6">David</option>
+                        <option value="7">Dylan</option>
+                        <option value="8">Emanuelle</option>
+                        <option value="9">Emely</option>
+                        <option value="10">João Gabriel</option>
+                        <option value="11">João Vitor</option>
+                        <option value="12">Julia</option>
+                        <option value="13">Kauã</option>
+                        <option value="14">Kelvyn</option>
+                        <option value="15">Lara</option>
+                        <option value="16">Laura</option>
+                        <option value="18">Lucas</option>
+                        <option value="19">Miguel</option>
+                        <option value="20">Mirella</option>
+                        <option value="21">Nathanaelly</option>
+                        <option value="22">Pablo</option>
+                        <option value="23">Paulo Gabriel</option>
+                        <option value="24">Paulo Kaled</option>
+                        <option value="25">Robson</option>
+                        <option value="26">Simony</option>
+                        <option value="27">Sthefany</option>
+                        <option value="28">Thiago Andrioli</option>
+                        <option value="29">Yuri</option>
+                        <option value="30">Matheus Gonçalves</option>
+                        <option value="31">Thiago Cordeiro</option>
+                    </select>
+                </td>
+                <td style="display:none;">4</td>
+                <td></td>
+            </tr>
+            <tr class="red">
+                <td class="name">Lucas</td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td>
+                    <select onchange="updatePoints(this.parentNode.parentNode)">
+                        <option value="0"></option>
+                        <option value="1">Alex Jr.</option>
+                        <option value="2">Alex Pedroso</option>
+                        <option value="3">Allan</option>
+                        <option value="4">Ana Clara</option>
+                        <option value="5">Ana Luiza</option>
+                        <option value="6">David</option>
+                        <option value="7">Dylan</option>
+                        <option value="8">Emanuelle</option>
+                        <option value="9">Emely</option>
+                        <option value="10">João Gabriel</option>
+                        <option value="11">João Vitor</option>
+                        <option value="12">Julia</option>
+                        <option value="13">Kauã</option>
+                        <option value="14">Kelvyn</option>
+                        <option value="15">Lara</option>
+                        <option value="16">Laura</option>
+                        <option value="17">Liége</option>
+                        <option value="19">Miguel</option>
+                        <option value="20">Mirella</option>
+                        <option value="21">Nathanaelly</option>
+                        <option value="22">Pablo</option>
+                        <option value="23">Paulo Gabriel</option>
+                        <option value="24">Paulo Kaled</option>
+                        <option value="25">Robson</option>
+                        <option value="26">Simony</option>
+                        <option value="27">Sthefany</option>
+                        <option value="28">Thiago Andrioli</option>
+                        <option value="29">Yuri</option>
+                        <option value="30">Matheus Gonçalves</option>
+                        <option value="31">Thiago Cordeiro</option>
+                    </select>
+                </td>
+                <td style="display:none;">4</td>
+                <td></td>
+            </tr>
+            <tr class="red">
+                <td class="name">Miguel</td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td>
+                    <select onchange="updatePoints(this.parentNode.parentNode)">
+                        <option value="0"></option>
+                        <option value="1">Alex Jr.</option>
+                        <option value="2">Alex Pedroso</option>
+                        <option value="3">Allan</option>
+                        <option value="4">Ana Clara</option>
+                        <option value="5">Ana Luiza</option>
+                        <option value="6">David</option>
+                        <option value="7">Dylan</option>
+                        <option value="8">Emanuelle</option>
+                        <option value="9">Emely</option>
+                        <option value="10">João Gabriel</option>
+                        <option value="11">João Vitor</option>
+                        <option value="12">Julia</option>
+                        <option value="13">Kauã</option>
+                        <option value="14">Kelvyn</option>
+                        <option value="15">Lara</option>
+                        <option value="16">Laura</option>
+                        <option value="17">Liége</option>
+                        <option value="18">Lucas</option>
+                        <option value="20">Mirella</option>
+                        <option value="21">Nathanaelly</option>
+                        <option value="22">Pablo</option>
+                        <option value="23">Paulo Gabriel</option>
+                        <option value="24">Paulo Kaled</option>
+                        <option value="25">Robson</option>
+                        <option value="26">Simony</option>
+                        <option value="27">Sthefany</option>
+                        <option value="28">Thiago Andrioli</option>
+                        <option value="29">Yuri</option>
+                        <option value="30">Matheus Gonçalves</option>
+                        <option value="31">Thiago Cordeiro</option>
+                    </select>
+                </td>
+                <td style="display:none;">4</td>
+                <td></td>
+            </tr>
+            <tr class="red">
+                <td class="name">Mirella</td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td>
+                    <select onchange="updatePoints(this.parentNode.parentNode)">
+                        <option value="0"></option>
+                        <option value="1">Alex Jr.</option>
+                        <option value="2">Alex Pedroso</option>
+                        <option value="3">Allan</option>
+                        <option value="4">Ana Clara</option>
+                        <option value="5">Ana Luiza</option>
+                        <option value="6">David</option>
+                        <option value="7">Dylan</option>
+                        <option value="8">Emanuelle</option>
+                        <option value="9">Emely</option>
+                        <option value="10">João Gabriel</option>
+                        <option value="11">João Vitor</option>
+                        <option value="12">Julia</option>
+                        <option value="13">Kauã</option>
+                        <option value="14">Kelvyn</option>
+                        <option value="15">Lara</option>
+                        <option value="16">Laura</option>
+                        <option value="17">Liége</option>
+                        <option value="18">Lucas</option>
+                        <option value="19">Miguel</option>
+                        <option value="21">Nathanaelly</option>
+                        <option value="22">Pablo</option>
+                        <option value="23">Paulo Gabriel</option>
+                        <option value="24">Paulo Kaled</option>
+                        <option value="25">Robson</option>
+                        <option value="26">Simony</option>
+                        <option value="27">Sthefany</option>
+                        <option value="28">Thiago Andrioli</option>
+                        <option value="29">Yuri</option>
+                        <option value="30">Matheus Gonçalves</option>
+                        <option value="31">Thiago Cordeiro</option>
+                    </select>
+                </td>
+                <td style="display:none;">4</td>
+                <td></td>
+            </tr>
+            <tr class="red">
+                <td class="name">Nathanaelly</td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td>
+                    <select onchange="updatePoints(this.parentNode.parentNode)">
+                        <option value="0"></option>
+                        <option value="1">Alex Jr.</option>
+                        <option value="2">Alex Pedroso</option>
+                        <option value="3">Allan</option>
+                        <option value="4">Ana Clara</option>
+                        <option value="5">Ana Luiza</option>
+                        <option value="6">David</option>
+                        <option value="7">Dylan</option>
+                        <option value="8">Emanuelle</option>
+                        <option value="9">Emely</option>
+                        <option value="10">João Gabriel</option>
+                        <option value="11">João Vitor</option>
+                        <option value="12">Julia</option>
+                        <option value="13">Kauã</option>
+                        <option value="14">Kelvyn</option>
+                        <option value="15">Lara</option>
+                        <option value="16">Laura</option>
+                        <option value="17">Liége</option>
+                        <option value="18">Lucas</option>
+                        <option value="19">Miguel</option>
+                        <option value="20">Mirella</option>
+                        <option value="22">Pablo</option>
+                        <option value="23">Paulo Gabriel</option>
+                        <option value="24">Paulo Kaled</option>
+                        <option value="25">Robson</option>
+                        <option value="26">Simony</option>
+                        <option value="27">Sthefany</option>
+                        <option value="28">Thiago Andrioli</option>
+                        <option value="29">Yuri</option>
+                        <option value="30">Matheus Gonçalves</option>
+                        <option value="31">Thiago Cordeiro</option>
+                    </select>
+                </td>
+                <td style="display:none;">4</td>
+                <td></td>
+            </tr>
+            <tr class="red">
+                <td class="name">Pablo</td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td>
+                    <select onchange="updatePoints(this.parentNode.parentNode)">
+                        <option value="0"></option>
+                        <option value="1">Alex Jr.</option>
+                        <option value="2">Alex Pedroso</option>
+                        <option value="3">Allan</option>
+                        <option value="4">Ana Clara</option>
+                        <option value="5">Ana Luiza</option>
+                        <option value="6">David</option>
+                        <option value="7">Dylan</option>
+                        <option value="8">Emanuelle</option>
+                        <option value="9">Emely</option>
+                        <option value="10">João Gabriel</option>
+                        <option value="11">João Vitor</option>
+                        <option value="12">Julia</option>
+                        <option value="13">Kauã</option>
+                        <option value="14">Kelvyn</option>
+                        <option value="15">Lara</option>
+                        <option value="16">Laura</option>
+                        <option value="17">Liége</option>
+                        <option value="18">Lucas</option>
+                        <option value="19">Miguel</option>
+                        <option value="20">Mirella</option>
+                        <option value="21">Nathanaelly</option>
+                        <option value="23">Paulo Gabriel</option>
+                        <option value="24">Paulo Kaled</option>
+                        <option value="25">Robson</option>
+                        <option value="26">Simony</option>
+                        <option value="27">Sthefany</option>
+                        <option value="28">Thiago Andrioli</option>
+                        <option value="29">Yuri</option>
+                        <option value="30">Matheus Gonçalves</option>
+                        <option value="31">Thiago Cordeiro</option>
+                    </select>
+                </td>
+                <td style="display:none;">4</td>
+                <td></td>
+            </tr>
+            <tr class="red">
+                <td class="name">Paulo Gabriel</td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td>
+                    <select onchange="updatePoints(this.parentNode.parentNode)">
+                        <option value="0"></option>
+                        <option value="1">Alex Jr.</option>
+                        <option value="2">Alex Pedroso</option>
+                        <option value="3">Allan</option>
+                        <option value="4">Ana Clara</option>
+                        <option value="5">Ana Luiza</option>
+                        <option value="6">David</option>
+                        <option value="7">Dylan</option>
+                        <option value="8">Emanuelle</option>
+                        <option value="9">Emely</option>
+                        <option value="10">João Gabriel</option>
+                        <option value="11">João Vitor</option>
+                        <option value="12">Julia</option>
+                        <option value="13">Kauã</option>
+                        <option value="14">Kelvyn</option>
+                        <option value="15">Lara</option>
+                        <option value="16">Laura</option>
+                        <option value="17">Liége</option>
+                        <option value="18">Lucas</option>
+                        <option value="19">Miguel</option>
+                        <option value="20">Mirella</option>
+                        <option value="21">Nathanaelly</option>
+                        <option value="22">Pablo</option>
+                        <option value="24">Paulo Kaled</option>
+                        <option value="25">Robson</option>
+                        <option value="26">Simony</option>
+                        <option value="27">Sthefany</option>
+                        <option value="28">Thiago Andrioli</option>
+                        <option value="29">Yuri</option>
+                        <option value="30">Matheus Gonçalves</option>
+                        <option value="31">Thiago Cordeiro</option>
+                    </select>
+                </td>
+                <td style="display:none;">4</td>
+                <td></td>
+            </tr>
+            <tr class="red">
+                <td class="name">Paulo Kaled</td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td>
+                    <select onchange="updatePoints(this.parentNode.parentNode)">
+                        <option value="0"></option>
+                        <option value="1">Alex Jr.</option>
+                        <option value="2">Alex Pedroso</option>
+                        <option value="3">Allan</option>
+                        <option value="4">Ana Clara</option>
+                        <option value="5">Ana Luiza</option>
+                        <option value="6">David</option>
+                        <option value="7">Dylan</option>
+                        <option value="8">Emanuelle</option>
+                        <option value="9">Emely</option>
+                        <option value="10">João Gabriel</option>
+                        <option value="11">João Vitor</option>
+                        <option value="12">Julia</option>
+                        <option value="13">Kauã</option>
+                        <option value="14">Kelvyn</option>
+                        <option value="15">Lara</option>
+                        <option value="16">Laura</option>
+                        <option value="17">Liége</option>
+                        <option value="18">Lucas</option>
+                        <option value="19">Miguel</option>
+                        <option value="20">Mirella</option>
+                        <option value="21">Nathanaelly</option>
+                        <option value="22">Pablo</option>
+                        <option value="23">Paulo Gabriel</option>
+                        <option value="25">Robson</option>
+                        <option value="26">Simony</option>
+                        <option value="27">Sthefany</option>
+                        <option value="28">Thiago Andrioli</option>
+                        <option value="29">Yuri</option>
+                        <option value="30">Matheus Gonçalves</option>
+                        <option value="31">Thiago Cordeiro</option>
+                    </select>
+                </td>
+                <td style="display:none;">4</td>
+                <td></td>
+            </tr>
+            <tr class="red">
+                <td class="name">Robson</td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td>
+                    <select onchange="updatePoints(this.parentNode.parentNode)">
+                        <option value="0"></option>
+                        <option value="1">Alex Jr.</option>
+                        <option value="2">Alex Pedroso</option>
+                        <option value="3">Allan</option>
+                        <option value="4">Ana Clara</option>
+                        <option value="5">Ana Luiza</option>
+                        <option value="6">David</option>
+                        <option value="7">Dylan</option>
+                        <option value="8">Emanuelle</option>
+                        <option value="9">Emely</option>
+                        <option value="10">João Gabriel</option>
+                        <option value="11">João Vitor</option>
+                        <option value="12">Julia</option>
+                        <option value="13">Kauã</option>
+                        <option value="14">Kelvyn</option>
+                        <option value="15">Lara</option>
+                        <option value="16">Laura</option>
+                        <option value="17">Liége</option>
+                        <option value="18">Lucas</option>
+                        <option value="19">Miguel</option>
+                        <option value="20">Mirella</option>
+                        <option value="21">Nathanaelly</option>
+                        <option value="22">Pablo</option>
+                        <option value="23">Paulo Gabriel</option>
+                        <option value="24">Paulo Kaled</option>
+                        <option value="26">Simony</option>
+                        <option value="27">Sthefany</option>
+                        <option value="28">Thiago Andrioli</option>
+                        <option value="29">Yuri</option>
+                        <option value="30">Matheus Gonçalves</option>
+                        <option value="31">Thiago Cordeiro</option>
+                    </select>
+                </td>
+                <td style="display:none;">4</td>
+                <td></td>
+            </tr>
+            <tr class="red">
+                <td class="name">Simony</td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td>
+                    <select onchange="updatePoints(this.parentNode.parentNode)">
+                        <option value="0"></option>
+                        <option value="1">Alex Jr.</option>
+                        <option value="2">Alex Pedroso</option>
+                        <option value="3">Allan</option>
+                        <option value="4">Ana Clara</option>
+                        <option value="5">Ana Luiza</option>
+                        <option value="6">David</option>
+                        <option value="7">Dylan</option>
+                        <option value="8">Emanuelle</option>
+                        <option value="9">Emely</option>
+                        <option value="10">João Gabriel</option>
+                        <option value="11">João Vitor</option>
+                        <option value="12">Julia</option>
+                        <option value="13">Kauã</option>
+                        <option value="14">Kelvyn</option>
+                        <option value="15">Lara</option>
+                        <option value="16">Laura</option>
+                        <option value="17">Liége</option>
+                        <option value="18">Lucas</option>
+                        <option value="19">Miguel</option>
+                        <option value="20">Mirella</option>
+                        <option value="21">Nathanaelly</option>
+                        <option value="22">Pablo</option>
+                        <option value="23">Paulo Gabriel</option>
+                        <option value="24">Paulo Kaled</option>
+                        <option value="25">Robson</option>
+                        <option value="27">Sthefany</option>
+                        <option value="28">Thiago Andrioli</option>
+                        <option value="29">Yuri</option>
+                        <option value="30">Matheus Gonçalves</option>
+                        <option value="31">Thiago Cordeiro</option>
+                    </select>
+                </td>
+                <td style="display:none;">4</td>
+                <td></td>
+            </tr>
+            <tr class="red">
+                <td class="name">Sthefany</td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td>
+                    <select onchange="updatePoints(this.parentNode.parentNode)">
+                        <option value="0"></option>
+                        <option value="1">Alex Jr.</option>
+                        <option value="2">Alex Pedroso</option>
+                        <option value="3">Allan</option>
+                        <option value="4">Ana Clara</option>
+                        <option value="5">Ana Luiza</option>
+                        <option value="6">David</option>
+                        <option value="7">Dylan</option>
+                        <option value="8">Emanuelle</option>
+                        <option value="9">Emely</option>
+                        <option value="10">João Gabriel</option>
+                        <option value="11">João Vitor</option>
+                        <option value="12">Julia</option>
+                        <option value="13">Kauã</option>
+                        <option value="14">Kelvyn</option>
+                        <option value="15">Lara</option>
+                        <option value="16">Laura</option>
+                        <option value="17">Liége</option>
+                        <option value="18">Lucas</option>
+                        <option value="19">Miguel</option>
+                        <option value="20">Mirella</option>
+                        <option value="21">Nathanaelly</option>
+                        <option value="22">Pablo</option>
+                        <option value="23">Paulo Gabriel</option>
+                        <option value="24">Paulo Kaled</option>
+                        <option value="25">Robson</option>
+                        <option value="26">Simony</option>
+                        <option value="28">Thiago Andrioli</option>
+                        <option value="29">Yuri</option>
+                        <option value="30">Matheus Gonçalves</option>
+                        <option value="31">Thiago Cordeiro</option>
+                    </select>
+                </td>
+                <td style="display:none;">4</td>
+                <td></td>
+            </tr>
+            <tr class="red">
+                <td class="name">Thiago Andrioli</td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td>
+                    <select onchange="updatePoints(this.parentNode.parentNode)">
+                        <option value="0"></option>
+                        <option value="1">Alex Jr.</option>
+                        <option value="2">Alex Pedroso</option>
+                        <option value="3">Allan</option>
+                        <option value="4">Ana Clara</option>
+                        <option value="5">Ana Luiza</option>
+                        <option value="6">David</option>
+                        <option value="7">Dylan</option>
+                        <option value="8">Emanuelle</option>
+                        <option value="9">Emely</option>
+                        <option value="10">João Gabriel</option>
+                        <option value="11">João Vitor</option>
+                        <option value="12">Julia</option>
+                        <option value="13">Kauã</option>
+                        <option value="14">Kelvyn</option>
+                        <option value="15">Lara</option>
+                        <option value="16">Laura</option>
+                        <option value="17">Liége</option>
+                        <option value="18">Lucas</option>
+                        <option value="19">Miguel</option>
+                        <option value="20">Mirella</option>
+                        <option value="21">Nathanaelly</option>
+                        <option value="22">Pablo</option>
+                        <option value="23">Paulo Gabriel</option>
+                        <option value="24">Paulo Kaled</option>
+                        <option value="25">Robson</option>
+                        <option value="26">Simony</option>
+                        <option value="27">Sthefany</option>
+                        <option value="29">Yuri</option>
+                        <option value="30">Matheus Gonçalves</option>
+                        <option value="31">Thiago Cordeiro</option>
+                    </select>
+                </td>
+                <td style="display:none;">4</td>
+                <td></td>
+            </tr>
+            <tr class="red">
+                <td class="name">Yuri</td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td>
+                    <select onchange="updatePoints(this.parentNode.parentNode)">
+                        <option value="0"></option>
+                        <option value="1">Alex Jr.</option>
+                        <option value="2">Alex Pedroso</option>
+                        <option value="3">Allan</option>
+                        <option value="4">Ana Clara</option>
+                        <option value="5">Ana Luiza</option>
+                        <option value="6">David</option>
+                        <option value="7">Dylan</option>
+                        <option value="8">Emanuelle</option>
+                        <option value="9">Emely</option>
+                        <option value="10">João Gabriel</option>
+                        <option value="11">João Vitor</option>
+                        <option value="12">Julia</option>
+                        <option value="13">Kauã</option>
+                        <option value="14">Kelvyn</option>
+                        <option value="15">Lara</option>
+                        <option value="16">Laura</option>
+                        <option value="17">Liége</option>
+                        <option value="18">Lucas</option>
+                        <option value="19">Miguel</option>
+                        <option value="20">Mirella</option>
+                        <option value="21">Nathanaelly</option>
+                        <option value="22">Pablo</option>
+                        <option value="23">Paulo Gabriel</option>
+                        <option value="24">Paulo Kaled</option>
+                        <option value="25">Robson</option>
+                        <option value="26">Simony</option>
+                        <option value="27">Sthefany</option>
+                        <option value="28">Thiago Andrioli</option>
+                        <option value="30">Matheus Gonçalves</option>
+                        <option value="31">Thiago Cordeiro</option>
+                    </select>
+                </td>
+                <td style="display:none;">4</td>
+                <td></td>
+            </tr>
+            <tr class="red">
+                <td class="name">Matheus Gonçalves</td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td>
+                    <select onchange="updatePoints(this.parentNode.parentNode)">
+                        <option value="0"></option>
+                        <option value="1">Alex Jr.</option>
+                        <option value="2">Alex Pedroso</option>
+                        <option value="3">Allan</option>
+                        <option value="4">Ana Clara</option>
+                        <option value="5">Ana Luiza</option>
+                        <option value="6">David</option>
+                        <option value="7">Dylan</option>
+                        <option value="8">Emanuelle</option>
+                        <option value="9">Emely</option>
+                        <option value="10">João Gabriel</option>
+                        <option value="11">João Vitor</option>
+                        <option value="12">Julia</option>
+                        <option value="13">Kauã</option>
+                        <option value="14">Kelvyn</option>
+                        <option value="15">Lara</option>
+                        <option value="16">Laura</option>
+                        <option value="17">Liége</option>
+                        <option value="18">Lucas</option>
+                        <option value="19">Miguel</option>
+                        <option value="20">Mirella</option>
+                        <option value="21">Nathanaelly</option>
+                        <option value="22">Pablo</option>
+                        <option value="23">Paulo Gabriel</option>
+                        <option value="24">Paulo Kaled</option>
+                        <option value="25">Robson</option>
+                        <option value="26">Simony</option>
+                        <option value="27">Sthefany</option>
+                        <option value="28">Thiago Andrioli</option>
+                        <option value="29">Yuri</option>
+                        <option value="31">Thiago Cordeiro</option>
+                    </select>
+                </td>
+                <td style="display:none;">4</td>
+                <td></td>
+            </tr>
+            <tr class="red">
+                <td class="name">Thiago Cordeiro</td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td><input type="checkbox" onchange="updatePoints(this.parentNode.parentNode)"></td>
+                <td>
+                    <select onchange="updatePoints(this.parentNode.parentNode)">
+                        <option value="0"></option>
+                        <option value="1">Alex Jr.</option>
+                        <option value="2">Alex Pedroso</option>
+                        <option value="3">Allan</option>
+                        <option value="4">Ana Clara</option>
+                        <option value="5">Ana Luiza</option>
+                        <option value="6">David</option>
+                        <option value="7">Dylan</option>
+                        <option value="8">Emanuelle</option>
+                        <option value="9">Emely</option>
+                        <option value="10">João Gabriel</option>
+                        <option value="11">João Vitor</option>
+                        <option value="12">Julia</option>
+                        <option value="13">Kauã</option>
+                        <option value="14">Kelvyn</option>
+                        <option value="15">Lara</option>
+                        <option value="16">Laura</option>
+                        <option value="17">Liége</option>
+                        <option value="18">Lucas</option>
+                        <option value="19">Miguel</option>
+                        <option value="20">Mirella</option>
+                        <option value="21">Nathanaelly</option>
+                        <option value="22">Pablo</option>
+                        <option value="23">Paulo Gabriel</option>
+                        <option value="24">Paulo Kaled</option>
+                        <option value="25">Robson</option>
+                        <option value="26">Simony</option>
+                        <option value="27">Sthefany</option>
+                        <option value="28">Thiago Andrioli</option>
+                        <option value="29">Yuri</option>
+                        <option value="30">Matheus Gonçalves</option>
+                    </select>
+                </td>
+                <td style="display:none;">4</td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+    <button class="pdf-button" onclick="downloadPDF()" onmouseover="this.style.backgroundColor = '#ff0505'" onmouseout="this.style.backgroundColor = '#ff5252'">Salvar em PDF</button>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.js"></script>
+
+    <footer>
+        <p><img src="PIXel urso g.png" width="64px"></p>
+        <p>Prof. Juliano Peterson</p>
+        <p>2023</p>
+    </footer>
+</body>
+</html>
